@@ -1,0 +1,12 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* font-family: inherit */
+}
+
+#content {
+    min-height: 50vh;
+    background-color: rgb(185, 1, 1);
+    color: white;
+}
