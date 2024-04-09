@@ -1,19 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokedex</title>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Pokedex</title>
 
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
-</head>
+        <link rel="stylesheet" href="style.css" />
+        <script src="script.js"></script>
+    </head>
 
-<body>
-    <h1>Pokédex</h1>
-    <button onclick="loadPokemon()">Pokemon laden</button>
+    <body>
+        <div class="page-container">
+            <div class="page-content">
 
-    <div id="content"></div>
-    
-</body>
+                <header>Header</header>
+
+                <h1>Pokédex</h1>
+                <button onclick="loadPokemon()">Pokemon laden</button>
+                <div id="pokemon">
+                    <div class="card">
+                        <div>#ID</div>
+                        <div>Name</div>
+                        <div>
+                            <div>Typ</div>
+                            <img src="#" alt="">
+                        </div>
+                    </div>
+                </div>
+                <!-- all other page content -->
+            </div>
+
+            <footer>Footer</footer>
+        </div>
+
+    </body>
 </html>
