@@ -12,26 +12,30 @@
     <body>
         <div class="page-container">
             <div class="page-content">
+                
+                <header>
+                    <h1>Pokédex</h1>
+                </header>
 
-                <header>Header</header>
+                <div class="pokemon-list">
 
-                <h1>Pokédex</h1>
-                <button onclick="loadPokemon()">Pokemon laden</button>
-                <div id="pokemon">
-                    <div class="card">
-                        <div>#ID</div>
-                        <div>Name</div>
-                        <div>
-                            <div>Typ</div>
-                            <img src="#" alt="">
+                    <div class="pokemon-card">
+                        <div id="pokemon_id">#ID</div>
+                        <div id="pokemon_name">Name</div>
+                        <div class="type-img-container">
+                            <div id="pokemon_type_container">
+                                <div class="pokemon_type">Typ 1</div>
+                                <div class="pokemon_type">Typ 2</div>
+                            </div>
+                            <img id="pokemon_img" src="#" alt="Bild" />
                         </div>
                     </div>
+                    
                 </div>
                 <!-- all other page content -->
             </div>
 
             <footer>Footer</footer>
         </div>
-
     </body>
 </html>
