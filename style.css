@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /* font-family: inherit */
+    font-family: "Roboto", sans-serif;
 }
 
 .page-container {
@@ -13,7 +13,7 @@
 .page-content {
     padding-bottom: 80px; /* Footer height */
     min-height: 100vh;
-    background-color: beige;
+    background-color: white;
     color: rgb(0, 0, 0);
 }
 
@@ -30,6 +30,7 @@ header {
     gap: 16px;
 }
 
+/* Pokemon-Karten */
 .pokemon-card {
     display: flex;
     flex-direction: column;
@@ -49,7 +50,7 @@ header {
     width: 100%;
     height: 100%;
     opacity: 0.1;
-    background-image: url(./img/pokeball.png);
+    background-image: url(./img/pokeball-bg.png);
     background-size: 65%;
     background-repeat: no-repeat;
     background-position: 160px 80px;
@@ -99,9 +100,49 @@ header {
     z-index: 10;
 }
 
+/* Load more Button */
+.button-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 32px;
+    font-size: 18px;
+}
 
+.load-more-button {
+    font-size: 18px;
+    padding: 8px 24px;
+    background-color: #eeeeee;
+    border-radius: 8px;
+    border: unset;
+    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
 
+.load-more-button:hover {
+    cursor: pointer;
+    filter: brightness(0.95);
+}
 
+.load-button-img {
+    height: 30px;
+}
+
+.pokeball-load {
+    height: 32px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Footer */
 footer {
     position: absolute;
     bottom: 0;

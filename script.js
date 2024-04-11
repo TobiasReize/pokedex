@@ -28,8 +28,8 @@ function savePokemonInfos() {               //Speichert die Pokemon-Infos in ein
     let pokemonTypes = currentPokemon['types'];
     let types = [];
 
-    for (let j = 0; j < pokemonTypes.length; j++) {
-        const pokemonType = pokemonTypes[j];
+    for (let i = 0; i < pokemonTypes.length; i++) {
+        const pokemonType = pokemonTypes[i];
         types.push(pokemonType['type']['name']);
     }
 
@@ -47,26 +47,31 @@ function renderPokemonCard() {              //Rendert die Pokemon-Karten
     let pokemonList = document.getElementById('pokemon_list');
     pokemonList.innerHTML = '';
 
-    for (let k = 0; k < pokemonInfos.length; k++) {
-        const pokemon = pokemonInfos[k];
-        pokemonList.innerHTML += /*html*/ `
-            <div class="pokemon-card">
-                <div class="pokemon-id">#${alwaysThreeDigits(pokemon['id'])}</div>
-                <div class="pokemon-name">${firstLetterUppercase(pokemon['name'])}</div>
-                <div class="type-img-container">
-                    <div id="pokemon_type_container_${k}" class="pokemon-type-container"></div>
-                    <img class="pokemon-img" src="${pokemon['imgSrc']}" alt="Image" />
-                </div>
-            </div>
-        `;
-
-        for (let l = 0; l < pokemon['types'].length; l++) {
-            const type = pokemon['types'][l];
-            document.getElementById(`pokemon_type_container_${k}`).innerHTML += /*html*/ `
+    for (let i = 0; i < pokemonInfos.length; i++) {
+        const pokemon = pokemonInfos[i];
+        pokemonList.innerHTML += pokemonCardHTML(i, pokemon);
+        
+        for (let j = 0; j < pokemon['types'].length; j++) {
+            const type = pokemon['types'][j];
+            document.getElementById(`pokemon_type_container_${i}`).innerHTML += /*html*/ `
                 <div class="pokemon-type">${firstLetterUppercase(type)}</div>
             `;
         }
     }
+}
+
+
+function pokemonCardHTML(i, pokemon) {
+    return  /*html*/ `
+        <div class="pokemon-card">
+            <div class="pokemon-id">#${alwaysThreeDigits(pokemon['id'])}</div>
+            <div class="pokemon-name">${firstLetterUppercase(pokemon['name'])}</div>
+            <div class="type-img-container">
+                <div id="pokemon_type_container_${i}" class="pokemon-type-container"></div>
+                <img class="pokemon-img" src="${pokemon['imgSrc']}" alt="Image" />
+            </div>
+        </div>
+    `;
 }
 
 
@@ -80,7 +85,18 @@ function alwaysThreeDigits(number) {            //Hilfsfunktion, damit die ID im
 }
 
 
-function loadMorePokemon() {
+async function loadMorePokemon() {          //Ladet die nächsten Pokemon und zeigt währenddessen eine Ladeanimation an
+    document.getElementById('button_container').innerHTML = /*html*/ `
+        Loading...
+        <img class="pokeball-load" src="./img/pokeball-load.png" alt="pokeball-load">
+    `;
     start = start + 20;
     end = end + 20;
+    await init();
+    document.getElementById('button_container').innerHTML = /*html*/ `
+        <button class="load-more-button" onclick="loadMorePokemon()">
+            Load more
+            <img class="load-button-img" src="./img/pokeball-btn.png" alt="Pokeball">
+        </button>
+    `;
 }
