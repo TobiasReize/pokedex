@@ -1,16 +1,23 @@
 let currentPokemon;
 let pokemonInfos = [];
+let start = 1;
+let end = 21;
 
 
-async function loadPokemon(start, end) {        //Ladet die Pokemon-Infos von der API herunter
-    for (let i = start; i < end + 1; i++) {
+async function init() {
+    await loadPokemon();
+    renderPokemonCard();
+}
+
+
+async function loadPokemon() {        //Ladet die Pokemon-Infos von der API herunter
+    for (let i = start; i < end; i++) {
         let url = `https://pokeapi.co/api/v2/pokemon/${i}`;
         let response = await fetch(url);
         currentPokemon = await response.json();
         savePokemonInfos();
     }
     console.log(pokemonInfos);
-    renderPokemonCard();
 }
 
 
@@ -70,4 +77,10 @@ function firstLetterUppercase(word) {           //Hilfsfunktion, damit der erste
 
 function alwaysThreeDigits(number) {            //Hilfsfunktion, damit die ID immer drei Stellen hat
     return ('00' + number.toString()).slice(-3);
+}
+
+
+function loadMorePokemon() {
+    start = start + 20;
+    end = end + 20;
 }
