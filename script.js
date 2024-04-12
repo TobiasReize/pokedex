@@ -2,16 +2,29 @@ let currentPokemon;
 let pokemonInfos = [];
 let start = 1;
 let end = 21;
-// let cardBgColor = [
-//     {'grass': 'green'},
-//     {'fire': 'red'},
-//     {'water': 'blue'}
-// ];
+
 let cardBgColor = {
-    'grass': 'green',
-    'fire': 'red',
-    'water': 'blue'
-};
+    'bug': 'rgb(139, 22, 22)',
+    'dark': 'rgb(47, 79, 79)',
+    'dragon': 'rgb(93, 56, 255)',
+    'electric': 'rgb(241, 220, 0)',
+    'fairy': 'rgb(255, 192, 203)',
+    'fighting': 'rgb(191, 71, 71)',
+    'fire': 'rgb(233, 0, 0)',
+    'flying': 'rgb(135, 206, 235)',
+    'ghost': 'rgb(75, 0, 130)',
+    'grass': 'rgb(50, 205, 50)',
+    'ground': 'rgb(139, 69, 19)',
+    'ice': 'rgb(173, 216, 230)',
+    'normal': 'rgb(128, 128, 128)',
+    'poison': 'rgb(128, 0, 128)',
+    'psychic': 'rgb(210, 26, 215)',
+    'rock': 'rgb(210, 180, 140)',
+    'shadow': 'rgb(30, 30, 30)',
+    'steel': 'rgb(169, 169, 169)',
+    'unknown': 'rgb(130, 130, 130)',
+    'water': 'rgb(45, 131, 255)'
+}
 
 
 async function init() {
@@ -66,9 +79,8 @@ function renderPokemonCard() {              //Rendert die Pokemon-Karten
             document.getElementById(`pokemon_type_container_${i}`).innerHTML += /*html*/ `
                 <div class="pokemon-type">${firstLetterUppercase(type)}</div>
             `;
-            
-            document.getElementById(`pokemon_card_${i}`).style.backgroundColor = `${cardBgColor[type]}`;
         }
+        document.getElementById(`pokemon_card_${i}`).style.backgroundColor = `${cardBgColor[pokemon['types'][0]]}`;
     }
 }
 

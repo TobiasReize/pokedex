@@ -34,7 +34,7 @@ header {
 .pokemon-card {
     display: flex;
     flex-direction: column;
-    background-color: #56d3be;
+    background-color: rgb(180, 180, 180);
     height: 250px;
     width: 350px;
     border-radius: 24px;
@@ -55,6 +55,12 @@ header {
     background-repeat: no-repeat;
     background-position: 160px 80px;
     z-index: 5;
+}
+
+.pokemon-card:hover {
+    cursor: pointer;
+    scale: 1.05;
+    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
 }
 
 .pokemon-id {
