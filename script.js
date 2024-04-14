@@ -30,6 +30,7 @@ let cardBgColor = {
 async function init() {
     await loadPokemon();
     renderPokemonCard();
+    endLoadingAnimation();
 }
 
 
@@ -87,7 +88,7 @@ function renderPokemonCard() {              //Rendert die Pokemon-Karten
 
 function pokemonCardHTML(i, pokemon) {
     return  /*html*/ `
-        <div id="pokemon_card_${i}" class="pokemon-card">
+        <div id="pokemon_card_${i}" class="pokemon-card" onclick="bigView(${i})">
             <div class="pokemon-id">#${alwaysThreeDigits(pokemon['id'])}</div>
             <div class="pokemon-name">${firstLetterUppercase(pokemon['name'])}</div>
             <div class="type-img-container">
@@ -99,6 +100,70 @@ function pokemonCardHTML(i, pokemon) {
 }
 
 
+async function loadMorePokemon() {          //Ladet die nächsten Pokemon und zeigt währenddessen eine Ladeanimation an
+    startLoadingAnimation();
+    start = start + 20;
+    end = end + 20;
+    await init();
+    endLoadingAnimation();
+}
+
+
+function bigView(i) {
+    const pokemon = pokemonInfos[i];
+    let bigViewContainer = document.getElementById('big_view_container');
+    bigViewContainer.classList.remove('d-none');
+    document.body.classList.add('overflow-hidden');
+    bigViewContainer.innerHTML = bigViewHTML(i, pokemon);
+    
+    for (let j = 0; j < pokemon['types'].length; j++) {
+        const type = pokemon['types'][j];
+        document.getElementById(`big_view_type_container_${i}`).innerHTML += /*html*/ `
+            <div class="pokemon-type">${firstLetterUppercase(type)}</div>
+        `;
+    }
+    document.getElementById(`big_view_card_${i}`).style.backgroundColor = `${cardBgColor[pokemon['types'][0]]}`;
+}
+
+
+function bigViewHTML(i, pokemon) {
+    return /*html*/ `
+        <div id="big_view_card_${i}" class="big-view-card">
+            <div class="upper-container">
+                <div class="pokemon-id">#${alwaysThreeDigits(pokemon['id'])}</div>
+                <div class="pokemon-name">${firstLetterUppercase(pokemon['name'])}</div>
+                <div id="big_view_type_container_${i}" class="big-view-type-container"></div>
+                <div class="big-view-img-container">
+                    <img src="${pokemon['imgSrc']}" alt="Image">
+                </div>
+            </div>
+            <div class="chart-container">
+                Statuswerte:
+            </div>
+        </div>
+    `;
+}
+
+
+
+// Hilfsfunktionen:
+function startLoadingAnimation() {          //startet die Ladeanimation
+    let loadButton = document.getElementById('load_button_container');
+    loadButton.innerHTML = /*html*/ `Loading...<img class="pokeball-load" src="./img/pokeball-load.png" alt="pokeball-load">`;
+}
+
+
+function endLoadingAnimation() {            //beendet die Ladeanimation und zeigt den load-button an
+    let loadButton = document.getElementById('load_button_container');
+    loadButton.innerHTML = /*html*/ `
+        <button class="load-more-button" onclick="loadMorePokemon()">
+            Load more
+            <img class="load-button-img" src="./img/pokeball-btn.png" alt="Pokeball">
+        </button>
+    `;
+}
+
+
 function firstLetterUppercase(word) {           //Hilfsfunktion, damit der erste Buchstabe großgeschrieben wird
     return word.charAt(0).toUpperCase() + word.slice(1);
 }
@@ -106,19 +171,4 @@ function firstLetterUppercase(word) {           //Hilfsfunktion, damit der erste
 
 function alwaysThreeDigits(number) {            //Hilfsfunktion, damit die ID immer drei Stellen hat
     return ('00' + number.toString()).slice(-3);
-}
-
-
-async function loadMorePokemon() {          //Ladet die nächsten Pokemon und zeigt währenddessen eine Ladeanimation an
-    let loadButton = document.getElementById('button_container');
-    loadButton.innerHTML = /*html*/ `Loading...<img class="pokeball-load" src="./img/pokeball-load.png" alt="pokeball-load">`;
-    start = start + 20;
-    end = end + 20;
-    await init();
-    loadButton.innerHTML = /*html*/ `
-        <button class="load-more-button" onclick="loadMorePokemon()">
-            Load more
-            <img class="load-button-img" src="./img/pokeball-btn.png" alt="Pokeball">
-        </button>
-    `;
 }
