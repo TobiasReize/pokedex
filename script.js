@@ -1,8 +1,9 @@
 let currentPokemon;
 let pokemonInfos = [];
+let filteredPokemons = [];
 let pokemonStatNames = ['HP', 'Attack', 'Defense', 'Sp-Attack', 'Sp-Defense', 'Speed'];
 let start = 1;
-let end = 21;
+let end = 20;
 let cardBgColor = {
     'bug': 'rgb(139, 22, 22)',
     'dark': 'rgb(47, 79, 79)',
@@ -60,13 +61,13 @@ const CHART_CONFIG_OPTIONS = {
 
 async function init() {
     await loadPokemon();
-    renderPokemonCard();
+    renderPokemonCard(pokemonInfos);
     endLoadingAnimation();
 }
 
 
 async function loadPokemon() {        //Ladet die Pokemon-Infos von der API herunter
-    for (let i = start; i < end; i++) {
+    for (let i = start; i < end + 1; i++) {
         let url = `https://pokeapi.co/api/v2/pokemon/${i}`;
         let response = await fetch(url);
         currentPokemon = await response.json();
@@ -84,6 +85,7 @@ function savePokemonInfos() {               //Speichert die Pokemon-Infos in ein
     let pokemonStats = currentPokemon['stats'];
     let types = [];
     let stats = [];
+    let pokemonInfo = {};
 
     for (let i = 0; i < pokemonTypes.length; i++) {
         const pokemonType = pokemonTypes[i];
@@ -95,7 +97,7 @@ function savePokemonInfos() {               //Speichert die Pokemon-Infos in ein
         stats.push(pokemonStat['base_stat']);
     }
 
-    let pokemonInfo = {
+    pokemonInfo = {
         'id': pokemonId,
         'name': pokemonName,
         'imgSrc': pokemonImgSrc,
@@ -106,12 +108,12 @@ function savePokemonInfos() {               //Speichert die Pokemon-Infos in ein
 }
 
 
-function renderPokemonCard() {              //Rendert die Pokemon-Karten
+function renderPokemonCard(pokemons) {              //Rendert die Pokemon-Karten
     let pokemonList = document.getElementById('pokemon_list');
     pokemonList.innerHTML = '';
 
-    for (let i = 0; i < pokemonInfos.length; i++) {
-        const pokemon = pokemonInfos[i];
+    for (let i = 0; i < pokemons.length; i++) {
+        const pokemon = pokemons[i];
         pokemonList.innerHTML += pokemonCardHTML(i, pokemon);
         
         for (let j = 0; j < pokemon['types'].length; j++) {
@@ -250,6 +252,24 @@ function nextPokemon(event, i) {            //zeigt das nächste Pokemon an
         index = i + 1;
     }
     showBigView(index);
+}
+
+
+function searchPokemon() {                  //Funktion zum Suchen und Filtern der geladenen Pokemon, je nach Eingabe
+    let inputField = document.getElementById('search_field').value;
+    let input = inputField.trim().toLowerCase();
+    filteredPokemons = [];
+
+    if (input.length > 2) {
+        for (let i = 0; i < pokemonInfos.length; i++) {
+            const pokemon = pokemonInfos[i];
+            if (pokemon['name'].includes(input)) {
+                filteredPokemons.push(pokemon);
+                console.log(filteredPokemons);
+            }
+        }
+        renderPokemonCard(filteredPokemons);
+    }
 }
 
 
