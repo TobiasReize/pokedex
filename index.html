@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="fonts.css">
         <link rel="stylesheet" href="style.css" />
         <script src="script.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>   <!-- Einbindung Chart-JS -->
     </head>
 
     <body onload="init()">
@@ -21,9 +22,7 @@
                 <div id="load_button_container" class="load-button-container">
                     Loading...<img class="pokeball-load" src="./img/pokeball-load.png" alt="pokeball-load">
                 </div>
-                
-                <div id="big_view_container" class="big-view-container d-none"></div>
-
+                <div onclick="closeBigView()" id="big_view_container" class="big-view-container d-none"></div>
             </div>
             <footer>Footer</footer>
         </div>

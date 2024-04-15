@@ -1,8 +1,8 @@
 let currentPokemon;
 let pokemonInfos = [];
+let pokemonStatNames = ['HP', 'Attack', 'Defense', 'Sp-Attack', 'Sp-Defense', 'Speed'];
 let start = 1;
 let end = 21;
-
 let cardBgColor = {
     'bug': 'rgb(139, 22, 22)',
     'dark': 'rgb(47, 79, 79)',
@@ -25,6 +25,37 @@ let cardBgColor = {
     'unknown': 'rgb(130, 130, 130)',
     'water': 'rgb(45, 131, 255)'
 }
+
+// Chart-JS Variablen:
+const CHART_CONFIG_BG_COLOR = [
+    'rgba(255, 99, 132, 0.2)',
+    'rgba(255, 159, 64, 0.2)',
+    'rgba(255, 205, 86, 0.2)',
+    'rgba(75, 192, 192, 0.2)',
+    'rgba(54, 162, 235, 0.2)',
+    'rgba(153, 102, 255, 0.2)'
+];
+const CHART_CONFIG_BRD_COLOR = [
+    'rgb(255, 99, 132)',
+    'rgb(255, 159, 64)',
+    'rgb(255, 205, 86)',
+    'rgb(75, 192, 192)',
+    'rgb(54, 162, 235)',
+    'rgb(153, 102, 255)'
+];
+const CHART_CONFIG_OPTIONS = {
+    indexAxis: 'y',
+    scales: {
+        y: {
+            beginAtZero: true
+        }
+    },
+    plugins: {
+        legend: {
+            display: false,
+        }
+    }
+};
 
 
 async function init() {
@@ -50,18 +81,26 @@ function savePokemonInfos() {               //Speichert die Pokemon-Infos in ein
     let pokemonName = currentPokemon['name'];
     let pokemonImgSrc = currentPokemon['sprites']['other']['dream_world']['front_default'];
     let pokemonTypes = currentPokemon['types'];
+    let pokemonStats = currentPokemon['stats'];
     let types = [];
+    let stats = [];
 
     for (let i = 0; i < pokemonTypes.length; i++) {
         const pokemonType = pokemonTypes[i];
         types.push(pokemonType['type']['name']);
     }
 
+    for (let j = 0; j < pokemonStats.length; j++) {
+        const pokemonStat = pokemonStats[j];
+        stats.push(pokemonStat['base_stat']);
+    }
+
     let pokemonInfo = {
         'id': pokemonId,
         'name': pokemonName,
         'imgSrc': pokemonImgSrc,
-        'types': types
+        'types': types,
+        'stats': stats
     };
     pokemonInfos.push(pokemonInfo);
 }
@@ -86,9 +125,9 @@ function renderPokemonCard() {              //Rendert die Pokemon-Karten
 }
 
 
-function pokemonCardHTML(i, pokemon) {
+function pokemonCardHTML(i, pokemon) {          //HTML-Template für die Pokemon-Karten
     return  /*html*/ `
-        <div id="pokemon_card_${i}" class="pokemon-card" onclick="bigView(${i})">
+        <div id="pokemon_card_${i}" class="pokemon-card" onclick="showBigView(${i})">
             <div class="pokemon-id">#${alwaysThreeDigits(pokemon['id'])}</div>
             <div class="pokemon-name">${firstLetterUppercase(pokemon['name'])}</div>
             <div class="type-img-container">
@@ -109,44 +148,6 @@ async function loadMorePokemon() {          //Ladet die nächsten Pokemon und ze
 }
 
 
-function bigView(i) {
-    const pokemon = pokemonInfos[i];
-    let bigViewContainer = document.getElementById('big_view_container');
-    bigViewContainer.classList.remove('d-none');
-    document.body.classList.add('overflow-hidden');
-    bigViewContainer.innerHTML = bigViewHTML(i, pokemon);
-    
-    for (let j = 0; j < pokemon['types'].length; j++) {
-        const type = pokemon['types'][j];
-        document.getElementById(`big_view_type_container_${i}`).innerHTML += /*html*/ `
-            <div class="pokemon-type">${firstLetterUppercase(type)}</div>
-        `;
-    }
-    document.getElementById(`big_view_card_${i}`).style.backgroundColor = `${cardBgColor[pokemon['types'][0]]}`;
-}
-
-
-function bigViewHTML(i, pokemon) {
-    return /*html*/ `
-        <div id="big_view_card_${i}" class="big-view-card">
-            <div class="upper-container">
-                <div class="pokemon-id">#${alwaysThreeDigits(pokemon['id'])}</div>
-                <div class="pokemon-name">${firstLetterUppercase(pokemon['name'])}</div>
-                <div id="big_view_type_container_${i}" class="big-view-type-container"></div>
-                <div class="big-view-img-container">
-                    <img src="${pokemon['imgSrc']}" alt="Image">
-                </div>
-            </div>
-            <div class="chart-container">
-                Statuswerte:
-            </div>
-        </div>
-    `;
-}
-
-
-
-// Hilfsfunktionen:
 function startLoadingAnimation() {          //startet die Ladeanimation
     let loadButton = document.getElementById('load_button_container');
     loadButton.innerHTML = /*html*/ `Loading...<img class="pokeball-load" src="./img/pokeball-load.png" alt="pokeball-load">`;
@@ -164,6 +165,95 @@ function endLoadingAnimation() {            //beendet die Ladeanimation und zeig
 }
 
 
+function showBigView(i) {               //Funktion zur Großansicht der Karten
+    const pokemon = pokemonInfos[i];
+    let bigViewContainer = document.getElementById('big_view_container');
+    bigViewContainer.classList.remove('d-none');
+    document.body.classList.add('overflow-hidden');
+    bigViewContainer.innerHTML = bigViewHTML(i, pokemon);
+    
+    for (let j = 0; j < pokemon['types'].length; j++) {
+        const type = pokemon['types'][j];
+        document.getElementById(`big_view_type_container_${i}`).innerHTML += /*html*/ `
+            <div class="pokemon-type">${firstLetterUppercase(type)}</div>
+        `;
+    }
+    document.getElementById(`big_view_card_${i}`).style.backgroundColor = `${cardBgColor[pokemon['types'][0]]}`;
+    statsChart(i);
+}
+
+
+function bigViewHTML(i, pokemon) {          //HTML-Template für die Großansicht
+    return /*html*/ `
+        <img class="arrow" onclick="previousPokemon(event, ${i})" src="./img/arrow-left.png" alt="arrow-left">
+        <div onclick="stopPropagation(event)" id="big_view_card_${i}" class="big-view-card">
+            <div class="upper-container">
+                <div class="pokemon-id">#${alwaysThreeDigits(pokemon['id'])}</div>
+                <div class="pokemon-name">${firstLetterUppercase(pokemon['name'])}</div>
+                <div id="big_view_type_container_${i}" class="big-view-type-container"></div>
+                <div class="big-view-img-container">
+                    <img src="${pokemon['imgSrc']}" alt="Image">
+                </div>
+            </div>
+            <div class="chart-container">
+                <b>Pokemon stats:</b>
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+        <img class="arrow" onclick="nextPokemon(event, ${i})" src="./img/arrow-right.png" alt="arrow-right">
+    `;
+}
+
+
+function statsChart(i) {                //Funktion zur Darstellung des Statuswerte-Diagramms via Chart-JS
+    const ctx = document.getElementById('myChart');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: pokemonStatNames,
+            datasets: [{
+                data: pokemonInfos[i]['stats'],
+                backgroundColor: CHART_CONFIG_BG_COLOR,
+                borderColor: CHART_CONFIG_BRD_COLOR,
+                borderWidth: 1,
+            }]
+        },
+        options: CHART_CONFIG_OPTIONS
+    });
+}
+
+
+function closeBigView() {                   //schließt die Großansicht wieder
+    let bigViewContainer = document.getElementById('big_view_container');
+    bigViewContainer.classList.add('d-none');
+    document.body.classList.remove('overflow-hidden');
+}
+
+
+function previousPokemon(event, i) {        //zeigt das vorherige Pokemon an
+    let index;
+    stopPropagation(event);
+    if (i - 1 < 0) {
+        index = pokemonInfos.length - 1;
+    } else {
+        index = i - 1;
+    }
+    showBigView(index);
+}
+
+
+function nextPokemon(event, i) {            //zeigt das nächste Pokemon an
+    stopPropagation(event);
+    if (i + 1 == pokemonInfos.length) {
+        index = 0;
+    } else {
+        index = i + 1;
+    }
+    showBigView(index);
+}
+
+
+// Hilfsfunktionen:
 function firstLetterUppercase(word) {           //Hilfsfunktion, damit der erste Buchstabe großgeschrieben wird
     return word.charAt(0).toUpperCase() + word.slice(1);
 }
@@ -171,4 +261,9 @@ function firstLetterUppercase(word) {           //Hilfsfunktion, damit der erste
 
 function alwaysThreeDigits(number) {            //Hilfsfunktion, damit die ID immer drei Stellen hat
     return ('00' + number.toString()).slice(-3);
+}
+
+
+function stopPropagation(event) {           //Verhindert das Event Bubbling beim Schließen der Großansicht
+    event.stopPropagation();
 }
