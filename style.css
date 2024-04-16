@@ -13,7 +13,7 @@
 .page-content {
     padding-bottom: 80px; /* Footer height */
     min-height: 100vh;
-    background-color: white;
+    background-color: rgb(145, 0, 0);
     color: rgb(0, 0, 0);
     display: flex;
     flex-direction: column;
@@ -46,7 +46,13 @@ header {
     justify-content: center;
     flex-wrap: wrap;
     gap: 16px;
-    background-color: rgb(190, 190, 190);
+    background-color: rgb(100, 100, 100);
+    border: 50px solid rgb(200, 200, 200);
+    border-radius: 24px;
+    box-shadow: inset -4px 4px 2px 6px rgb(140, 140, 140), 
+                inset 4px -4px 2px 8px rgb(240, 240, 240),
+                -2px 2px 2px 0px rgb(170, 170, 170),
+                4px -4px 0px 6px rgb(240, 240, 240);
 }
 
 .ctrl-width {
@@ -65,7 +71,6 @@ header {
 .pokemon-card {
     display: flex;
     flex-direction: column;
-    background-color: rgb(180, 180, 180);
     height: 250px;
     width: 350px;
     border-radius: 24px;
@@ -86,6 +91,7 @@ header {
     background-repeat: no-repeat;
     background-position: 160px 80px;
     z-index: 5;
+    border-radius: 24px;
 }
 
 .pokemon-card:hover {
@@ -143,8 +149,9 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-bottom: 32px;
+    padding: 32px 0;
     font-size: 18px;
+    color: white;
 }
 
 .load-more-button {

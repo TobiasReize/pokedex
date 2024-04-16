@@ -18,7 +18,7 @@ let cardBgColor = {
     'grass': 'rgb(50, 205, 50)',
     'ground': 'rgb(139, 69, 19)',
     'ice': 'rgb(173, 216, 230)',
-    'normal': 'rgb(128, 128, 128)',
+    'normal': 'rgb(150, 150, 150)',
     'poison': 'rgb(128, 0, 128)',
     'psychic': 'rgb(210, 26, 215)',
     'rock': 'rgb(210, 180, 140)',
