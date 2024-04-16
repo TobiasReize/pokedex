@@ -1,11 +1,12 @@
 let currentPokemon;
-let pokemonInfos = [];
+let allLoadedPokemons = [];
 let filteredPokemons = [];
+let renderedPokemons = [];
 let pokemonStatNames = ['HP', 'Attack', 'Defense', 'Sp-Attack', 'Sp-Defense', 'Speed'];
 let start = 1;
 let end = 20;
 let cardBgColor = {
-    'bug': 'rgb(139, 22, 22)',
+    'bug': 'rgb(121, 157, 28)',
     'dark': 'rgb(47, 79, 79)',
     'dragon': 'rgb(93, 56, 255)',
     'electric': 'rgb(241, 220, 0)',
@@ -61,7 +62,7 @@ const CHART_CONFIG_OPTIONS = {
 
 async function init() {
     await loadPokemon();
-    renderPokemonCard(pokemonInfos);
+    renderPokemonCard();
     endLoadingAnimation();
 }
 
@@ -73,7 +74,7 @@ async function loadPokemon() {        //Ladet die Pokemon-Infos von der API heru
         currentPokemon = await response.json();
         savePokemonInfos();
     }
-    console.log(pokemonInfos);
+    renderedPokemons = allLoadedPokemons;
 }
 
 
@@ -104,16 +105,16 @@ function savePokemonInfos() {               //Speichert die Pokemon-Infos in ein
         'types': types,
         'stats': stats
     };
-    pokemonInfos.push(pokemonInfo);
+    allLoadedPokemons.push(pokemonInfo);
 }
 
 
-function renderPokemonCard(pokemons) {              //Rendert die Pokemon-Karten
+function renderPokemonCard() {              //Rendert die Pokemon-Karten
     let pokemonList = document.getElementById('pokemon_list');
     pokemonList.innerHTML = '';
 
-    for (let i = 0; i < pokemons.length; i++) {
-        const pokemon = pokemons[i];
+    for (let i = 0; i < renderedPokemons.length; i++) {
+        const pokemon = renderedPokemons[i];
         pokemonList.innerHTML += pokemonCardHTML(i, pokemon);
         
         for (let j = 0; j < pokemon['types'].length; j++) {
@@ -156,7 +157,7 @@ function startLoadingAnimation() {          //startet die Ladeanimation
 }
 
 
-function endLoadingAnimation() {            //beendet die Ladeanimation und zeigt den load-button an
+function endLoadingAnimation() {            //beendet die Ladeanimation und zeigt den Load more-button an
     let loadButton = document.getElementById('load_button_container');
     loadButton.innerHTML = /*html*/ `
         <button class="load-more-button" onclick="loadMorePokemon()">
@@ -168,7 +169,7 @@ function endLoadingAnimation() {            //beendet die Ladeanimation und zeig
 
 
 function showBigView(i) {               //Funktion zur Großansicht der Karten
-    const pokemon = pokemonInfos[i];
+    const pokemon = renderedPokemons[i];
     let bigViewContainer = document.getElementById('big_view_container');
     bigViewContainer.classList.remove('d-none');
     document.body.classList.add('overflow-hidden');
@@ -214,7 +215,7 @@ function statsChart(i) {                //Funktion zur Darstellung des Statuswer
         data: {
             labels: pokemonStatNames,
             datasets: [{
-                data: pokemonInfos[i]['stats'],
+                data: renderedPokemons[i]['stats'],
                 backgroundColor: CHART_CONFIG_BG_COLOR,
                 borderColor: CHART_CONFIG_BRD_COLOR,
                 borderWidth: 1,
@@ -236,7 +237,7 @@ function previousPokemon(event, i) {        //zeigt das vorherige Pokemon an
     let index;
     stopPropagation(event);
     if (i - 1 < 0) {
-        index = pokemonInfos.length - 1;
+        index = renderedPokemons.length - 1;
     } else {
         index = i - 1;
     }
@@ -246,7 +247,7 @@ function previousPokemon(event, i) {        //zeigt das vorherige Pokemon an
 
 function nextPokemon(event, i) {            //zeigt das nächste Pokemon an
     stopPropagation(event);
-    if (i + 1 == pokemonInfos.length) {
+    if (i + 1 == renderedPokemons.length) {
         index = 0;
     } else {
         index = i + 1;
@@ -259,16 +260,17 @@ function searchPokemon() {                  //Funktion zum Suchen und Filtern de
     let inputField = document.getElementById('search_field').value;
     let input = inputField.trim().toLowerCase();
     filteredPokemons = [];
+    renderedPokemons = allLoadedPokemons;
 
     if (input.length > 2) {
-        for (let i = 0; i < pokemonInfos.length; i++) {
-            const pokemon = pokemonInfos[i];
+        for (let i = 0; i < renderedPokemons.length; i++) {
+            const pokemon = renderedPokemons[i];
             if (pokemon['name'].includes(input)) {
                 filteredPokemons.push(pokemon);
-                console.log(filteredPokemons);
             }
         }
-        renderPokemonCard(filteredPokemons);
+        renderedPokemons = filteredPokemons;
+        renderPokemonCard();
     }
 }
 

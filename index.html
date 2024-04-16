@@ -14,18 +14,24 @@
 
     <body onload="init()">
         <div class="page-container">
-            <div class="page-content">
+            <main class="page-content">
                 <header>
-                    <h1>Pokédex</h1>
-                    <input onkeyup="searchPokemon()" id="search_field" type="search" placeholder="Search Pokemon...">
+                    <div class="header-content inner-content ctrl-width">
+                        <h1>Pokédex</h1>
+                        <input onkeyup="searchPokemon()" id="search_field" type="search" placeholder="Search Pokemon...">    
+                    </div>
                 </header>
-                <div id="pokemon_list"></div>
-                <div id="load_button_container" class="load-button-container">
+                <section id="pokemon_list" class="ctrl-width"></section>
+                <section id="load_button_container" class="load-button-container ctrl-width">
                     Loading...<img class="pokeball-load" src="./img/pokeball-load.png" alt="pokeball-load">
+                </section>
+                <section onclick="closeBigView()" id="big_view_container" class="big-view-container d-none"></section>
+            </main>
+            <footer>
+                <div class="footer-content inner-content ctrl-width">
+                    Footer-Content
                 </div>
-                <div onclick="closeBigView()" id="big_view_container" class="big-view-container d-none"></div>
-            </div>
-            <footer>Footer</footer>
+            </footer>
         </div>
     </body>
 </html>
