@@ -146,14 +146,13 @@ async function loadMorePokemon() {          //Ladet die nächsten Pokemon und ze
     startLoadingAnimation();
     start = start + 20;
     end = end + 20;
-    await init();
-    endLoadingAnimation();
+    init();
 }
 
 
 function startLoadingAnimation() {          //startet die Ladeanimation
     let loadButton = document.getElementById('load_button_container');
-    loadButton.innerHTML = /*html*/ `Loading...<img class="pokeball-load" src="./img/pokeball-load.png" alt="pokeball-load">`;
+    loadButton.innerHTML = /*html*/ `<b>Loading...</b><img class="pokeball-load" src="./img/pokeball-load.png" alt="pokeball-load">`;
 }
 
 
@@ -257,19 +256,25 @@ function nextPokemon(event, i) {            //zeigt das nächste Pokemon an
 
 
 function searchPokemon() {                  //Funktion zum Suchen und Filtern der geladenen Pokemon, je nach Eingabe
+    // let pokemonList = document.getElementById('pokemon_list');
     let inputField = document.getElementById('search_field').value;
     let input = inputField.trim().toLowerCase();
     filteredPokemons = [];
-    renderedPokemons = allLoadedPokemons;
+    renderedPokemons = allLoadedPokemons;   //damit auch alle Pokemon wieder angezeigt werden, wenn man die Eingabe wieder löscht
 
     if (input.length > 2) {
         for (let i = 0; i < renderedPokemons.length; i++) {
             const pokemon = renderedPokemons[i];
             if (pokemon['name'].includes(input)) {
                 filteredPokemons.push(pokemon);
-            }
+            } 
+            // else {
+            //     pokemonList.innerHTML = /*html*/ `<div class="no-search-result">Kein Pokemon gefunden!</div>`;
+            // }
         }
         renderedPokemons = filteredPokemons;
+        renderPokemonCard();
+    } else if (input.length == 0) {     //falls die Eingabe wieder gelöscht wird
         renderPokemonCard();
     }
 }

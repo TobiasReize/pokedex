@@ -20,12 +20,29 @@
     align-items: center;
 }
 
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgb(190, 0, 0);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: rgb(255, 160, 160);
+}
+
+/* Header */
 header {
     height: 80px;
     width: 100%;
     background-color: rgb(145, 0, 0);
     display: flex;
     justify-content: center;
+    margin-bottom: 24px;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.2);
 }
 
 .inner-content {
@@ -35,11 +52,40 @@ header {
 
 .header-content {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
     color: white;
 }
 
+.header-logo-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+h1 {
+    font-size: 48px;
+}
+
+header img {
+    height: 60px;
+}
+
+#search_field {
+    padding: 4px 16px;
+    font-size: 16px;
+}
+
+#search_field::placeholder {
+    font-size: 16px;
+}
+
+.no-search-result {
+    color: white;
+    font-size: 20px;
+}
+
+/* Pokemon-Liste */
 #pokemon_list {
     padding: 32px;
     display: flex;
@@ -205,9 +251,7 @@ header {
 .big-view-card {
     display: flex;
     flex-direction: column;
-    background-color: wheat;
     width: 700px;
-    height: 800px;
     border-radius: 24px;
 }
 
@@ -278,10 +322,19 @@ footer {
     height: 80px;
     display: flex;
     justify-content: center;
+    box-shadow: 0px -2px 4px 0px rgba(0, 0, 0, 0.2);
 }
 
 .footer-content {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 1500px) {
+    #pokemon_list {
+        margin: 0px 22px 0 16px;
+    }
 }

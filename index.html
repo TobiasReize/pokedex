@@ -17,8 +17,11 @@
             <main class="page-content">
                 <header>
                     <div class="header-content inner-content ctrl-width">
-                        <h1>Pokédex</h1>
-                        <input onkeyup="searchPokemon()" id="search_field" type="search" placeholder="Search Pokemon...">    
+                        <div class="header-logo-container">
+                            <img src="./img/pokeball-load.png" alt="pokeball">
+                            <h1>Pokédex</h1>
+                        </div>
+                        <input onkeyup="searchPokemon()" id="search_field" type="text" placeholder="Search Pokemon...">    
                     </div>
                 </header>
                 <section id="pokemon_list" class="ctrl-width"></section>
@@ -29,7 +32,7 @@
             </main>
             <footer>
                 <div class="footer-content inner-content ctrl-width">
-                    Footer-Content
+                    <i>made by Tobias</i>
                 </div>
             </footer>
         </div>
