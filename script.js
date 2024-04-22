@@ -186,7 +186,7 @@ function showBigView(i) {               //Funktion zur Großansicht der Karten
 
 function bigViewHTML(i, pokemon) {          //HTML-Template für die Großansicht
     return /*html*/ `
-        <img class="arrow" onclick="previousPokemon(event, ${i})" src="./img/arrow-left.png" alt="arrow-left">
+        <img class="arrow ar-left" onclick="previousPokemon(event, ${i})" src="./img/arrow-left.png" alt="arrow-left">
         <div onclick="stopPropagation(event)" id="big_view_card_${i}" class="big-view-card">
             <div class="upper-container">
                 <div class="pokemon-id">#${alwaysThreeDigits(pokemon['id'])}</div>
@@ -201,7 +201,7 @@ function bigViewHTML(i, pokemon) {          //HTML-Template für die Großansich
                 <canvas id="myChart"></canvas>
             </div>
         </div>
-        <img class="arrow" onclick="nextPokemon(event, ${i})" src="./img/arrow-right.png" alt="arrow-right">
+        <img class="arrow ar-right" onclick="nextPokemon(event, ${i})" src="./img/arrow-right.png" alt="arrow-right">
     `;
 }
 
