@@ -69,6 +69,7 @@ h1 {
 
 header img {
     height: 60px;
+    cursor: pointer;
 }
 
 #search_field {
@@ -174,11 +175,13 @@ header img {
 }
 
 .pokemon-type {
-    background-color: rgba(255, 255, 255, 0.2);
     padding: 8px 32px;
     height: fit-content;
+    min-width: 136px;
     border-radius: 16px;
     color: white;
+    filter: brightness(0.9);
+    text-align: center;
 }
 
 .pokemon-img {
@@ -338,3 +341,21 @@ footer {
         margin: 0px 22px 0 16px;
     }
 }
+
+@media (max-width: 900px) {
+    .big-view-card {
+        width: 500px;
+    }
+
+    .big-view-img-container img {
+        height: 215px;
+    }
+
+    .arrow {
+        height: 40px;
+    }
+}
+
+/* @media (max-width: 650px) {
+
+} */

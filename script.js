@@ -120,17 +120,16 @@ function renderPokemonCard() {              //Rendert die Pokemon-Karten
         for (let j = 0; j < pokemon['types'].length; j++) {
             const type = pokemon['types'][j];
             document.getElementById(`pokemon_type_container_${i}`).innerHTML += /*html*/ `
-                <div class="pokemon-type">${firstLetterUppercase(type)}</div>
+                <div class="pokemon-type" style="background-color: ${cardBgColor[pokemon['types'][j]]}">${firstLetterUppercase(type)}</div>
             `;
         }
-        document.getElementById(`pokemon_card_${i}`).style.backgroundColor = `${cardBgColor[pokemon['types'][0]]}`;
     }
 }
 
 
 function pokemonCardHTML(i, pokemon) {          //HTML-Template für die Pokemon-Karten
     return  /*html*/ `
-        <div id="pokemon_card_${i}" class="pokemon-card" onclick="showBigView(${i})">
+        <div id="pokemon_card_${i}" class="pokemon-card" onclick="showBigView(${i})" style="background-color: ${cardBgColor[pokemon['types'][0]]}">
             <div class="pokemon-id">#${alwaysThreeDigits(pokemon['id'])}</div>
             <div class="pokemon-name">${firstLetterUppercase(pokemon['name'])}</div>
             <div class="type-img-container">
@@ -177,7 +176,7 @@ function showBigView(i) {               //Funktion zur Großansicht der Karten
     for (let j = 0; j < pokemon['types'].length; j++) {
         const type = pokemon['types'][j];
         document.getElementById(`big_view_type_container_${i}`).innerHTML += /*html*/ `
-            <div class="pokemon-type">${firstLetterUppercase(type)}</div>
+            <div class="pokemon-type" style="background-color: ${cardBgColor[pokemon['types'][j]]}">${firstLetterUppercase(type)}</div>
         `;
     }
     document.getElementById(`big_view_card_${i}`).style.backgroundColor = `${cardBgColor[pokemon['types'][0]]}`;
