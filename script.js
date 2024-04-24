@@ -37,6 +37,7 @@ const CHART_CONFIG_BG_COLOR = [
     'rgba(54, 162, 235, 0.2)',
     'rgba(153, 102, 255, 0.2)'
 ];
+
 const CHART_CONFIG_BRD_COLOR = [
     'rgb(255, 99, 132)',
     'rgb(255, 159, 64)',
@@ -45,11 +46,15 @@ const CHART_CONFIG_BRD_COLOR = [
     'rgb(54, 162, 235)',
     'rgb(153, 102, 255)'
 ];
+
 const CHART_CONFIG_OPTIONS = {
     indexAxis: 'y',
     scales: {
         y: {
-            beginAtZero: true
+            beginAtZero: true,
+            ticks: {
+                autoSkip: false
+            }
         }
     },
     plugins: {
@@ -68,13 +73,17 @@ async function init() {
 
 
 async function loadPokemon() {        //Ladet die Pokemon-Infos von der API herunter
-    for (let i = start; i < end + 1; i++) {
-        let url = `https://pokeapi.co/api/v2/pokemon/${i}`;
-        let response = await fetch(url);
-        currentPokemon = await response.json();
-        savePokemonInfos();
+    try {
+        for (let i = start; i < end + 1; i++) {
+            let url = `https://pokeapi.co/api/v2/pokemon/${i}`;
+            let response = await fetch(url);
+            currentPokemon = await response.json();
+            savePokemonInfos();
+        }
+        renderedPokemons = allLoadedPokemons;
+    } catch (e) {
+        console.log('Fehler aufgetreten!: ' + e);
     }
-    renderedPokemons = allLoadedPokemons;
 }
 
 
@@ -88,16 +97,29 @@ function savePokemonInfos() {               //Speichert die Pokemon-Infos in ein
     let stats = [];
     let pokemonInfo = {};
 
+    savePokemonTypes(pokemonTypes, types);
+    savePokemonStats(pokemonStats, stats);
+    fillPokemonArray(pokemonInfo, pokemonId, pokemonName, pokemonImgSrc, types, stats);
+}
+
+
+function savePokemonTypes(pokemonTypes, types) {        //Speichert die Pokemon-Typen in das Array
     for (let i = 0; i < pokemonTypes.length; i++) {
         const pokemonType = pokemonTypes[i];
         types.push(pokemonType['type']['name']);
     }
+}
 
+
+function savePokemonStats(pokemonStats, stats) {        //Speichert die Pokemon-Stats in das Array
     for (let j = 0; j < pokemonStats.length; j++) {
         const pokemonStat = pokemonStats[j];
         stats.push(pokemonStat['base_stat']);
     }
+}
 
+
+function fillPokemonArray(pokemonInfo, pokemonId, pokemonName, pokemonImgSrc, types, stats) {       //Speichert alle Pokemon-Daten in das globale Array
     pokemonInfo = {
         'id': pokemonId,
         'name': pokemonName,
@@ -155,7 +177,7 @@ function startLoadingAnimation() {          //startet die Ladeanimation
 }
 
 
-function endLoadingAnimation() {            //beendet die Ladeanimation und zeigt den Load more-button an
+function endLoadingAnimation() {            //beendet die Ladeanimation und zeigt den Load-more Button an
     let loadButton = document.getElementById('load_button_container');
     loadButton.innerHTML = /*html*/ `
         <button class="load-more-button" onclick="loadMorePokemon()">
@@ -255,27 +277,28 @@ function nextPokemon(event, i) {            //zeigt das nächste Pokemon an
 
 
 function searchPokemon() {                  //Funktion zum Suchen und Filtern der geladenen Pokemon, je nach Eingabe
-    // let pokemonList = document.getElementById('pokemon_list');
     let inputField = document.getElementById('search_field').value;
     let input = inputField.trim().toLowerCase();
     filteredPokemons = [];
     renderedPokemons = allLoadedPokemons;   //damit auch alle Pokemon wieder angezeigt werden, wenn man die Eingabe wieder löscht
 
     if (input.length > 2) {
-        for (let i = 0; i < renderedPokemons.length; i++) {
-            const pokemon = renderedPokemons[i];
-            if (pokemon['name'].includes(input)) {
-                filteredPokemons.push(pokemon);
-            } 
-            // else {
-            //     pokemonList.innerHTML = /*html*/ `<div class="no-search-result">Kein Pokemon gefunden!</div>`;
-            // }
-        }
-        renderedPokemons = filteredPokemons;
-        renderPokemonCard();
+        checkSearchInput(input, filteredPokemons);
     } else if (input.length == 0) {     //falls die Eingabe wieder gelöscht wird
         renderPokemonCard();
     }
+}
+
+
+function checkSearchInput(input, filteredPokemons) {        //prüft ob die Eingabe zu einem Namen passt und speichert diesen dann in ein Array
+    for (let i = 0; i < renderedPokemons.length; i++) {
+        const pokemon = renderedPokemons[i];
+        if (pokemon['name'].includes(input)) {
+            filteredPokemons.push(pokemon);
+        }
+    }
+    renderedPokemons = filteredPokemons;
+    renderPokemonCard();
 }
 
 
